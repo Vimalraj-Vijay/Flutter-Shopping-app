@@ -1,0 +1,19 @@
+import 'dart:async' show Future;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class PreferenceUtils {
+  static late SharedPreferences _prefsInstance;
+
+  static Future<SharedPreferences> init() async {
+    _prefsInstance = await SharedPreferences.getInstance();
+    return _prefsInstance;
+  }
+
+  static String getString(String key, [String? defValue]) {
+    return _prefsInstance.getString(key) ?? defValue ?? "";
+  }
+
+  static setString(String key, String value) {
+    return _prefsInstance.setString(key, value);
+  }
+}
