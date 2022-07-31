@@ -26,11 +26,9 @@ jobs:
     # Setup Java environment in order to build the Android app.
     - uses: actions/checkout@v1
     - uses: actions/setup-java@v1
-    - uses: actions/checkout@master
-    - uses: codecov/codecov-action@v3
 
       with:
-        java-version: '1.8.0_322'
+        java-version: '12.x'
     
     # Setup the flutter environment.
     - uses: actions/checkout@v2
