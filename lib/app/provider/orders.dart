@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 
 import '../../app/provider/cart.dart';
 
-
 class OrderItem {
   String id;
   double total;

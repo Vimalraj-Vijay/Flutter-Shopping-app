@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/app/provider/orders.dart'
-    show Orders;
+import 'package:shopping_app/app/provider/orders.dart' show Orders;
 import 'package:shopping_app/app/widgets/app_drawer.dart';
 import 'package:shopping_app/app/widgets/order_item.dart';
 import 'package:provider/provider.dart';
