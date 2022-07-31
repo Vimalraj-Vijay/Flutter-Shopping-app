@@ -1,0 +1,17 @@
+{
+  "LABEL": {
+    "name": "Title needs formatting",
+    "color": "FF0000"
+  },
+  "CHECKS": {
+    "prefixes": ["Fix: ", "Feature: ", "Test Case: "],
+    "regexp": "docs\\(v[0-9]\\): ",
+    "regexpFlags": "i",
+    "ignoreLabels" : ["dont-check-PRs-with-this-label", "meta"]
+  },
+  "MESSAGES": {
+    "success": "All Okay 👍  with the Title check your PR description and other checks",
+    "failure": "Title Standard Failed Please check and update 🤦🏻‍♀️🤦🏻🤦🏾‍♂️",
+    "notice": ""
+  }
+}
