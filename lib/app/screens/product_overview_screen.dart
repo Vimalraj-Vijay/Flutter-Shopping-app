@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/cart.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
 import 'package:shopping_app/app/screens/cart_details.dart';
 import 'package:shopping_app/app/utils/filter_options.dart';
 import 'package:shopping_app/app/widgets/badge.dart';
-import 'package:provider/provider.dart';
 
 import '../../utils/strings.dart';
 import '../widgets/app_drawer.dart';

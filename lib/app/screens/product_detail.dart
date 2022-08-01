@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
 import 'package:shopping_app/utils/common_appbar.dart';
-import 'package:provider/provider.dart';
 
 class ProductDetail extends StatelessWidget {
   static const id = "/productDetail";

@@ -20,13 +20,13 @@ class ProductProvider with ChangeNotifier {
           'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
     ),
     Products(
-      id: 'p3',
-      title: 'Yellow Scarf',
-      description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 19.99,
-      imageUrl:
-          'https://www.pashminawear.com/1316/yellow-cashmere-scarf-in-twill-weave.jpg',
-    ),
+        id: 'p3',
+        title: 'Yellow Scarf',
+        description: 'Warm and cozy - exactly what you need for the winter.',
+        price: 19.99,
+        imageUrl:
+            'https://www.pashminawear.com/1316/yellow-cashmere-scarf-in-twill-weave.jpg',
+        isFavorite: true),
     Products(
       id: 'p4',
       title: 'A Pan',
