@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/cart.dart' show Cart;
 import 'package:shopping_app/app/widgets/cart_item.dart';
 import 'package:shopping_app/app/widgets/empty_cart.dart';
 import 'package:shopping_app/utils/common_appbar.dart';
-import 'package:provider/provider.dart';
 
 import '../provider/orders.dart';
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/orders.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
 import 'package:shopping_app/utils/globalcontext.dart';
 import 'package:shopping_app/utils/routes.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 import 'app/provider/cart.dart';
 import 'app/shopping_home.dart';

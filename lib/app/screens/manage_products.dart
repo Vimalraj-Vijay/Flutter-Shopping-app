@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
 import 'package:shopping_app/app/screens/edit_product.dart';
 import 'package:shopping_app/app/widgets/app_drawer.dart';
 import 'package:shopping_app/app/widgets/manage_product_item.dart';
-import 'package:provider/provider.dart';
 
 class ManageProducts extends StatelessWidget {
   static const id = "/manageProducts";
