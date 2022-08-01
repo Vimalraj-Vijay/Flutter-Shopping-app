@@ -26,6 +26,7 @@ class ProductProvider with ChangeNotifier {
       price: 19.99,
       imageUrl:
           'https://www.pashminawear.com/1316/yellow-cashmere-scarf-in-twill-weave.jpg',
+      isFavorite: true
     ),
     Products(
       id: 'p4',
