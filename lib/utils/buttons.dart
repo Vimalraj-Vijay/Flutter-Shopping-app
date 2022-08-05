@@ -13,15 +13,15 @@ Widget getElevatedButton(String text, VoidCallback onPressed,
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(text),
-        ),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(
               getTextColorBasedOnBackgroundColor(textColorBlack)),
           backgroundColor: MaterialStateProperty.all(backgroundColor),
           padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(text),
         ),
       ),
     ),

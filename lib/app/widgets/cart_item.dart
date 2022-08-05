@@ -17,16 +17,16 @@ class CartItem extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: Container(
         color: Theme.of(context).errorColor,
-        child: const Icon(
-          Icons.delete,
-          size: 30,
-          color: Colors.white,
-        ),
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(
           right: 10,
         ),
         margin: const EdgeInsets.all(10),
+        child: const Icon(
+          Icons.delete,
+          size: 30,
+          color: Colors.white,
+        ),
       ),
       onDismissed: (_) => {
         Provider.of<Cart>(context, listen: false)
@@ -62,6 +62,7 @@ class CartItem extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: CircleAvatar(
                   radius: 15,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: Text(
                     cart.items.values.toList()[index].quantity.toString(),
                     style: const TextStyle(
@@ -69,7 +70,6 @@ class CartItem extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  backgroundColor: Theme.of(context).primaryColor,
                 ),
               ),
               Text(

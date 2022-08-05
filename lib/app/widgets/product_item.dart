@@ -15,19 +15,6 @@ class ProductItem extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              ProductDetail.id,
-              arguments: product.id,
-            );
-          },
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
         footer: GridTileBar(
           title: Text(
             product.title,
@@ -63,6 +50,19 @@ class ProductItem extends StatelessWidget {
                 ),
               );
             },
+          ),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              ProductDetail.id,
+              arguments: product.id,
+            );
+          },
+          child: Image.network(
+            product.imageUrl,
+            fit: BoxFit.cover,
           ),
         ),
       ),
