@@ -53,28 +53,22 @@ body:
     validations:
       required: false
   - type: dropdown
-    id: browsers
+    id: platforms
     attributes:
-      label: "Browsers"
-      description: What browsers are you seeing the problem on ?
+      label: "Platform"
+      description: What Platform are you seeing the problem on ?
       multiple: true
       options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-        - Opera
+        - Android
+        - iOS
+        - Web
     validations:
-      required: false
-  - type: dropdown
-    id: os
+      required: true
+  - type: textarea
+    id: device
     attributes:
-      label: "OS"
-      description: What is the impacted environment ?
-      multiple: true
-      options:
-        - Windows
-        - Linux
-        - Mac
+      label: "Device Details"
+      description: Please share the Devices information(Device model,OS,and others information about the device).
+      render: bash
     validations:
-      required: false
+      required: true
