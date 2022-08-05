@@ -95,7 +95,8 @@ class _EditProductState extends State<EditProduct> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Edit Product"),
+          title:
+              Text(_editProduct.title.isEmpty ? "Add Product" : "Edit Product"),
           actions: [
             IconButton(
                 onPressed: () {
