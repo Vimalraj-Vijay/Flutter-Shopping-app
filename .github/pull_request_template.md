@@ -1,5 +1,6 @@
 ## 📝 Feature/Bug Description
-  
+
+// TODO PR title should starts with "Fix: ", "Feature: ", "Test Case: ", "Improvement: "
 
 ## 🏁 Type of change
 
@@ -8,6 +9,7 @@
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Code improvement (change which improves the code quality cause existing functionality to work as expected)
 - [ ] This change requires a documentation update
 - [ ] Unit test added to improve coverage
 - [ ] Other ()

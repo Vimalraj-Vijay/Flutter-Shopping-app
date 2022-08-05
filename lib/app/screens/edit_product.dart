@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/products.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
+import 'package:shopping_app/utils/textfield_validator.dart';
 
 class EditProduct extends StatefulWidget {
   static const id = "/editProduct";
@@ -122,10 +123,7 @@ class _EditProductState extends State<EditProduct> {
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Please provide the title";
-                        }
-                        return null;
+                        return TextFieldValidator.validator(value, "title");
                       },
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
@@ -159,10 +157,8 @@ class _EditProductState extends State<EditProduct> {
                       maxLines: 3,
                       keyboardType: TextInputType.multiline,
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Please provide the description";
-                        }
-                        return null;
+                        return TextFieldValidator.validator(
+                            value, "description");
                       },
                       onFieldSubmitted: (_) {
                         FocusScope.of(context).requestFocus(_priceFocusNode);
@@ -192,17 +188,7 @@ class _EditProductState extends State<EditProduct> {
                         ),
                       ),
                       validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Please provide the price";
-                        }
-                        if (double.tryParse(value) == null) {
-                          return "Please enter a valid number";
-                        }
-
-                        if (double.tryParse(value)! <= 0) {
-                          return "Please enter a valid number greater than zero";
-                        }
-                        return null;
+                        return TextFieldValidator.priceValidator(value);
                       },
                       textInputAction: TextInputAction.next,
                       keyboardType:
@@ -254,21 +240,8 @@ class _EditProductState extends State<EditProduct> {
                               ),
                             ),
                             validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Please provide the image url";
-                              }
-
-                              if (!value.startsWith("http") &&
-                                  !value.startsWith("https")) {
-                                return "Please provide the valid image url";
-                              }
-
-                              if (!value.endsWith(".png") &&
-                                  !value.endsWith(".jpeg") &&
-                                  !value.endsWith(".jpg")) {
-                                return "Please provide the valid image url";
-                              }
-                              return null;
+                              return TextFieldValidator.imageUrlValidator(
+                                  value);
                             },
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.url,
