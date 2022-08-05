@@ -45,7 +45,7 @@ class _EditProductState extends State<EditProduct> {
   void didChangeDependencies() {
     if (_isInit) {
       final productId = ModalRoute.of(context)?.settings.arguments as String;
-      if (productId.isNotEmpty) {
+      if (productId.isEmpty) {
         _editProduct =
             Provider.of<ProductProvider>(context).getProductById(productId);
         _initValues = {
