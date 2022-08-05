@@ -42,19 +42,19 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               icon: const Icon(Icons.more_vert),
               itemBuilder: (_) => [
                     const PopupMenuItem(
-                      child: Text("Only Favourites"),
                       value: FilterOptions.favourites,
+                      child: Text("Only Favourites"),
                     ),
                     const PopupMenuItem(
-                      child: Text("Show All"),
                       value: FilterOptions.all,
+                      child: Text("Show All"),
                     )
                   ]),
           Consumer<Cart>(
             builder: (context, carts, ch) => Badge(
-              child: ch!,
               value: carts.cartCount().toString(),
               color: Colors.red,
+              child: ch!,
             ),
             child: IconButton(
                 onPressed: () => {Navigator.pushNamed(context, CartDetails.id)},
@@ -73,8 +73,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               ),
               itemBuilder: (cxt, index) => ChangeNotifierProvider.value(
                 // ignore: prefer_const_constructors
-                child: ProductItem(),
                 value: products[index],
+                // ignore: prefer_const_constructors
+                child: ProductItem(),
               ),
               itemCount: products.length,
               padding: const EdgeInsets.all(10),

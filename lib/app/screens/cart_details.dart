@@ -51,13 +51,13 @@ class CartDetails extends StatelessWidget {
                         ),
                         cart.clearCart()
                       },
-                      child: const Text("ORDER NOW"),
                       style: ButtonStyle(
                         foregroundColor:
                             MaterialStateProperty.all(Colors.purple),
                         backgroundColor: MaterialStateProperty.all(
                             Theme.of(context).primaryColor),
                       ),
+                      child: const Text("ORDER NOW"),
                     )
                 ],
               ),

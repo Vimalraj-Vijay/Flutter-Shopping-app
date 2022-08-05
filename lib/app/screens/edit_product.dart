@@ -45,7 +45,7 @@ class _EditProductState extends State<EditProduct> {
   void didChangeDependencies() {
     if (_isInit) {
       final productId = ModalRoute.of(context)?.settings.arguments as String;
-      if (productId.isEmpty) {
+      if (productId.isNotEmpty) {
         _editProduct =
             Provider.of<ProductProvider>(context).getProductById(productId);
         _initValues = {
@@ -74,8 +74,8 @@ class _EditProductState extends State<EditProduct> {
   }
 
   void _saveForm() {
-    final _isValid = _form.currentState?.validate();
-    if (!_isValid!) {
+    final isValid = _form.currentState?.validate();
+    if (!isValid!) {
       return;
     }
     _form.currentState?.save();
@@ -250,7 +250,7 @@ class _EditProductState extends State<EditProduct> {
                             onEditingComplete: () {
                               setState(() {});
                             },
-                            onFieldSubmitted: (_imageUrlController) {
+                            onFieldSubmitted: (imageUrlController) {
                               FocusScope.of(context).unfocus();
                             },
                             onSaved: (value) {
