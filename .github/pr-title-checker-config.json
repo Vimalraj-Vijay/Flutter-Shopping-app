@@ -4,7 +4,7 @@
     "color": "FF0000"
   },
   "CHECKS": {
-    "prefixes": ["Fix: ", "Feature: ", "Test Case: "],
+    "prefixes": ["Fix: ", "Feature: ", "Test Case: ", "Improvement: "],
     "regexp": "docs\\(v[0-9]\\): ",
     "regexpFlags": "i",
     "ignoreLabels" : ["dont-check-PRs-with-this-label", "meta"]

@@ -1,5 +1,6 @@
 ## 📝 Feature/Bug Description
-  
+
+// TODO PR title should starts with "Fix: ", "Feature: ", "Test Case: ", "Improvement: "
 
 ## 🏁 Type of change
 
