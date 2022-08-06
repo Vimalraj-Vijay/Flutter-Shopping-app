@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shopping_app/app/provider/products.dart';
+import 'package:shopping_app/utils/api_constants.dart';
 
 class ProductProvider with ChangeNotifier {
   final List<Products> _items = [
@@ -49,15 +53,26 @@ class ProductProvider with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProducts(Products products) {
-    final addProduct = Products(
-        id: DateTime.now().toString(),
-        title: products.title,
-        description: products.description,
-        imageUrl: products.imageUrl,
-        price: products.price);
-    _items.insert(0, addProduct);
-    notifyListeners();
+  Future<void> addProducts(Products products) {
+    final url = Uri.parse(ApiConstants.baseUrl + ApiConstants.productsEndpoint);
+    return http
+        .post(url,
+            body: json.encode({
+              "title": products.title,
+              "description": products.description,
+              "imageUrl": products.imageUrl,
+              "price": products.price,
+            }))
+        .then((response) {
+      final addProduct = Products(
+          id: json.decode(response.body)["name"],
+          title: products.title,
+          description: products.description,
+          imageUrl: products.imageUrl,
+          price: products.price);
+      _items.insert(0, addProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Products products) {
