@@ -1,7 +1,7 @@
 {
   "LABEL": {
     "name": "Title needs formatting",
-    "color": "FF0000"
+    "color": "A20EE0"
   },
   "CHECKS": {
     "prefixes": ["Fix: ", "Feature: ", "Test Case: ", "Improvement: "],
