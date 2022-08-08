@@ -86,7 +86,21 @@ class _EditProductState extends State<EditProduct> {
     if (_editProduct.id.isEmpty) {
       Provider.of<ProductProvider>(context, listen: false)
           .addProducts(_editProduct)
-          .then((value) {
+          .catchError((error) {
+        // ignore: prefer_void_to_null
+        return showDialog<Null>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: const Text("Something went wrong"),
+                  content: Text(error.toString()),
+                  actions: [
+                    TextButton(
+                      onPressed: () => {Navigator.of(ctx).pop()},
+                      child: const Text("Okay"),
+                    )
+                  ],
+                ));
+      }).then((value) {
         setState(() {
           _isLoading = false;
         });
