@@ -74,7 +74,7 @@ class _EditProductState extends State<EditProduct> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState?.validate();
     if (!isValid!) {
       return;
@@ -84,36 +84,42 @@ class _EditProductState extends State<EditProduct> {
       _isLoading = true;
     });
     if (_editProduct.id.isEmpty) {
-      Provider.of<ProductProvider>(context, listen: false)
-          .addProducts(_editProduct)
-          .catchError((error) {
-        // ignore: prefer_void_to_null
-        return showDialog<Null>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: const Text("Something went wrong"),
-                  content: Text(error.toString()),
-                  actions: [
-                    TextButton(
-                      onPressed: () => {Navigator.of(ctx).pop()},
-                      child: const Text("Okay"),
-                    )
-                  ],
-                ));
-      }).then((value) {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.pop(context);
-      });
+      try {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .addProducts(_editProduct);
+      } catch (error) {
+        await _errorDialog(error);
+      }
     } else {
-      Provider.of<ProductProvider>(context, listen: false)
-          .updateProduct(_editProduct.id, _editProduct);
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.pop(context);
+      try {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .updateProduct(_editProduct.id, _editProduct);
+      } catch (error) {
+        await _errorDialog(error);
+      }
     }
+    setState(() {
+      _isLoading = false;
+    });
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
+  }
+
+  // ignore: prefer_void_to_null
+  Future<Null> _errorDialog(error) {
+    // ignore: prefer_void_to_null
+    return showDialog<Null>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: const Text("Something went wrong"),
+              content: Text(error.toString()),
+              actions: [
+                TextButton(
+                  onPressed: () => {Navigator.of(ctx).pop()},
+                  child: const Text("Okay"),
+                )
+              ],
+            ));
   }
 
   @override

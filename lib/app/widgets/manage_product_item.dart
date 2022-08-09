@@ -12,6 +12,7 @@ class ManageProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
@@ -67,10 +68,25 @@ class ManageProductItem extends StatelessWidget {
                               color: Colors.white,
                             )),
                         IconButton(
-                            onPressed: () {
-                              Provider.of<ProductProvider>(context,
-                                      listen: false)
-                                  .deleteProduct(products.id);
+                            onPressed: () async {
+                              try {
+                                await Provider.of<ProductProvider>(context,
+                                        listen: false)
+                                    .deleteProduct(products.id)
+                                    .then((value) {
+                                  scaffold.showSnackBar(const SnackBar(
+                                      content: Text(
+                                    "Item deleted successfully",
+                                    textAlign: TextAlign.center,
+                                  )));
+                                });
+                              } catch (error) {
+                                scaffold.showSnackBar(const SnackBar(
+                                    content: Text(
+                                  "Failed to delete",
+                                  textAlign: TextAlign.center,
+                                )));
+                              }
                             },
                             icon: const Icon(
                               Icons.delete,

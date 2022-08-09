@@ -4,42 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping_app/app/provider/products.dart';
 import 'package:shopping_app/utils/api_constants.dart';
+import 'package:shopping_app/utils/custom_exception.dart';
 
 class ProductProvider with ChangeNotifier {
-  final List<Products> _items = [
-    Products(
-      id: 'p1',
-      title: 'Red Shirt',
-      description: 'A red shirt - it is pretty red!',
-      price: 29.99,
-      imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    ),
-    Products(
-      id: 'p2',
-      title: 'Trousers',
-      description: 'A nice pair of trousers.',
-      price: 59.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    ),
-    Products(
-        id: 'p3',
-        title: 'Yellow Scarf',
-        description: 'Warm and cozy - exactly what you need for the winter.',
-        price: 19.99,
-        imageUrl:
-            'https://www.pashminawear.com/1316/yellow-cashmere-scarf-in-twill-weave.jpg',
-        isFavorite: true),
-    Products(
-      id: 'p4',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),
-  ];
+  List<Products> _items = [];
 
   List<Products> get products {
     return [..._items];
@@ -53,40 +21,87 @@ class ProductProvider with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  Future<void> addProducts(Products products) {
-    final url = Uri.parse(ApiConstants.baseUrl + ApiConstants.productsEndpoint);
-    return http
-        .post(url,
-            body: json.encode({
-              "title": products.title,
-              "description": products.description,
-              "imageUrl": products.imageUrl,
-              "price": products.price,
-            }))
-        .then((response) {
+  Future<void> fetchProducts() async {
+    final url = Uri.parse(ApiConstants.baseUrl +
+        ApiConstants.productsEndpoint +
+        ApiConstants.urlFormat);
+    try {
+      final response = await http.get(url);
+      final extractedResponse =
+          jsonDecode(response.body) as Map<String, dynamic>;
+      final List<Products> loadProducts = [];
+      extractedResponse.forEach((key, value) {
+        loadProducts.add(
+          Products(
+            id: key,
+            title: value['title'],
+            description: value['description'],
+            imageUrl: value['imageUrl'],
+            price: value['price'],
+            isFavorite: value['isFavorite'],
+          ),
+        );
+      });
+      _items = loadProducts;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> addProducts(Products products) async {
+    final url = Uri.parse(ApiConstants.baseUrl +
+        ApiConstants.productsEndpoint +
+        ApiConstants.urlFormat);
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            "title": products.title,
+            "description": products.description,
+            "imageUrl": products.imageUrl,
+            "price": products.price,
+            "isFavorite": products.isFavorite,
+          }));
+
       final addProduct = Products(
           id: json.decode(response.body)["name"],
           title: products.title,
           description: products.description,
           imageUrl: products.imageUrl,
-          price: products.price);
+          price: products.price,
+          isFavorite: products.isFavorite);
       _items.insert(0, addProduct);
       notifyListeners();
-    }).catchError((error) {
-      throw error;
-    });
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  void updateProduct(String id, Products products) {
+  Future<void> updateProduct(String id, Products products) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
+      final url = Uri.parse(
+          "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}");
+      await http.patch(url,
+          body: json.encode({
+            "title": products.title,
+            "description": products.description,
+            "imageUrl": products.imageUrl,
+            "price": products.price,
+          }));
       _items[prodIndex] = products;
       notifyListeners();
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
-    notifyListeners();
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.parse(
+        "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}");
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      throw CustomException("Http Request failed");
+    } else {
+      _items.removeWhere((prod) => prod.id == id);
+      notifyListeners();
+    }
   }
 }

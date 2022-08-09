@@ -10,6 +10,10 @@ class ManageProducts extends StatelessWidget {
 
   const ManageProducts({Key? key}) : super(key: key);
 
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<ProductProvider>(context, listen: false).fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<ProductProvider>(context);
@@ -25,10 +29,13 @@ class ManageProducts extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ListView.builder(
-        itemBuilder: (_, index) =>
-            ManageProductItem(products: productData.products[index]),
-        itemCount: productData.products.length,
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: ListView.builder(
+          itemBuilder: (_, index) =>
+              ManageProductItem(products: productData.products[index]),
+          itemCount: productData.products.length,
+        ),
       ),
     );
   }

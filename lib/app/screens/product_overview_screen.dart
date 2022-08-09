@@ -19,6 +19,24 @@ class ProductOverviewScreen extends StatefulWidget {
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _showFavourites = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<ProductProvider>(context).fetchProducts().then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +81,26 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: products.isNotEmpty
-          ? GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemBuilder: (cxt, index) => ChangeNotifierProvider.value(
-                // ignore: prefer_const_constructors
-                value: products[index],
-                // ignore: prefer_const_constructors
-                child: ProductItem(),
-              ),
-              itemCount: products.length,
-              padding: const EdgeInsets.all(10),
-            )
-          : const Center(child: Text("No favourites found")),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : products.isNotEmpty
+              ? GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemBuilder: (cxt, index) => ChangeNotifierProvider.value(
+                    // ignore: prefer_const_constructors
+                    value: products[index],
+                    // ignore: prefer_const_constructors
+                    child: ProductItem(),
+                  ),
+                  itemCount: products.length,
+                  padding: const EdgeInsets.all(10),
+                )
+              : const Center(child: Text("No favourites found")),
     );
   }
 }
