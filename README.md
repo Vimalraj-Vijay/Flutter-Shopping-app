@@ -1,7 +1,6 @@
 # Shopping App
 
 An online shopping app developed using Flutter
-
     * [Provider](https://pub.dev/packages/provider) for State management.
     * Fetch Products,Orders from Backend(Firebase Database).
     * Store and Update Products to backend.
