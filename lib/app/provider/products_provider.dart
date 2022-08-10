@@ -76,20 +76,32 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(String id, Products products) async {
+  Future<void> updateProduct(String id, Products products, bool isFav) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url = Uri.parse(
           "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}");
-      await http.patch(url,
-          body: json.encode({
-            "title": products.title,
-            "description": products.description,
-            "imageUrl": products.imageUrl,
-            "price": products.price,
-          }));
-      _items[prodIndex] = products;
-      notifyListeners();
+      dynamic updateProduct;
+      if (isFav) {
+        products.toggleFavorite();
+        updateProduct = json.encode({
+          "isFavorite": products.isFavorite,
+        });
+      } else {
+        updateProduct = json.encode({
+          "title": products.title,
+          "description": products.description,
+          "imageUrl": products.imageUrl,
+          "price": products.price,
+        });
+      }
+      final response = await http.patch(url, body: updateProduct);
+      if (response.statusCode >= 400) {
+        throw CustomException("Http Request failed");
+      } else {
+        _items[prodIndex] = products;
+        notifyListeners();
+      }
     }
   }
 
