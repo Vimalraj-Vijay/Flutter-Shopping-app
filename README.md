@@ -1,10 +1,10 @@
 # Shopping App
 
 An online shopping app developed using Flutter
-    * [Provider](https://pub.dev/packages/provider) for State management.
-    * Fetch Products,Orders from Backend(Firebase Database).
-    * Store and Update Products to backend.
-    * Used [Http](https://pub.dev/packages/http)
+   - [Provider](https://pub.dev/packages/provider) for State management.
+   - Fetch Products,Orders from Backend(**Firebase Database**).
+   - Store and Update Products to backend.
+   - Used [Http](https://pub.dev/packages/http) Package for request call.
 
 # Code Coverage
 [![Codecov](https://github.com/Vimalraj-Vijay/Flutter-Shopping-app/actions/workflows/codecov.yml/badge.svg)](https://github.com/Vimalraj-Vijay/Flutter-Shopping-app/actions/workflows/codecov.yml)
