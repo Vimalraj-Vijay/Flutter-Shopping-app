@@ -3,4 +3,5 @@ class ApiConstants {
       'https://flutter-shopping-app-3bace-default-rtdb.firebaseio.com/';
   static String urlFormat = ".json";
   static String productsEndpoint = "products";
+  static String ordersEndpoint = "orders";
 }

@@ -34,7 +34,8 @@ void main() async {
               title: "title",
               description: "description",
               imageUrl: "imageUrl",
-              price: 66));
+              price: 66),
+          false);
 
       // then
       var actual = productProvider.products;

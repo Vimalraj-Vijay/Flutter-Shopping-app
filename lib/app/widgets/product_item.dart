@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/products.dart';
+import 'package:shopping_app/app/provider/products_provider.dart';
 import 'package:shopping_app/app/screens/product_detail.dart';
 
 import '../provider/cart.dart';
@@ -12,6 +13,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Products>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final scaffold = ScaffoldMessenger.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -26,8 +28,25 @@ class ProductItem extends StatelessWidget {
               iconSize: 20,
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                product.toggleFavorite();
+              onPressed: () async {
+                try {
+                  await Provider.of<ProductProvider>(context, listen: false)
+                      .updateProduct(product.id, product, true)
+                      .then((value) {
+                    scaffold.showSnackBar(
+                      const SnackBar(
+                        content: Text("Updated Successfully"),
+                      ),
+                    );
+                  });
+                } catch (error) {
+                  product.toggleFavorite();
+                  scaffold.showSnackBar(
+                    const SnackBar(
+                      content: Text("Failed to update"),
+                    ),
+                  );
+                }
               },
             ),
           ),

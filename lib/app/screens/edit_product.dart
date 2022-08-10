@@ -93,7 +93,7 @@ class _EditProductState extends State<EditProduct> {
     } else {
       try {
         await Provider.of<ProductProvider>(context, listen: false)
-            .updateProduct(_editProduct.id, _editProduct);
+            .updateProduct(_editProduct.id, _editProduct, false);
       } catch (error) {
         await _errorDialog(error);
       }
