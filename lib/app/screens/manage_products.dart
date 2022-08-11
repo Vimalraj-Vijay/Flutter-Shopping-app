@@ -29,14 +29,16 @@ class ManageProducts extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () => _refreshProducts(context),
-        child: ListView.builder(
-          itemBuilder: (_, index) =>
-              ManageProductItem(products: productData.products[index]),
-          itemCount: productData.products.length,
-        ),
-      ),
+      body: productData.products.isEmpty
+          ? const Center(child: Text('No Products Found. Add a product'))
+          : RefreshIndicator(
+              onRefresh: () => _refreshProducts(context),
+              child: ListView.builder(
+                itemBuilder: (_, index) =>
+                    ManageProductItem(products: productData.products[index]),
+                itemCount: productData.products.length,
+              ),
+            ),
     );
   }
 }
