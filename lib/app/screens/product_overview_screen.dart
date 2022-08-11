@@ -100,7 +100,10 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                   itemCount: products.length,
                   padding: const EdgeInsets.all(10),
                 )
-              : const Center(child: Text("No favourites found")),
+              : Center(
+                  child: Text(_showFavourites
+                      ? "No favourites item found"
+                      : "No products found")),
     );
   }
 }
