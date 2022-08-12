@@ -19,6 +19,7 @@ class _EditProductState extends State<EditProduct> {
   final _imageFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
   final _form = GlobalKey<FormState>();
+  var _isNewProduct = true;
 
   var _editProduct =
       Products(id: "", title: "", description: "", imageUrl: "", price: 0);
@@ -47,6 +48,7 @@ class _EditProductState extends State<EditProduct> {
     if (_isInit) {
       final productId = ModalRoute.of(context)?.settings.arguments as String;
       if (productId.isNotEmpty) {
+        _isNewProduct = false;
         _editProduct =
             Provider.of<ProductProvider>(context).getProductById(productId);
         _initValues = {
@@ -128,8 +130,7 @@ class _EditProductState extends State<EditProduct> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title:
-              Text(_editProduct.title.isEmpty ? "Add Product" : "Edit Product"),
+          title: Text(_isNewProduct ? "Add Product" : "Edit Product"),
           actions: [
             IconButton(
                 onPressed: () {
