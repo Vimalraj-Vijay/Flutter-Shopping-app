@@ -3,7 +3,7 @@ import 'package:shopping_app/app/provider/cart.dart';
 import 'package:shopping_app/app/provider/orders.dart';
 
 void main() async {
-  Orders orders = Orders();
+  Orders orders = Orders("",[]);
   List<CartItem> cartItem = [];
 
   setUp(() {

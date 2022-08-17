@@ -7,6 +7,21 @@ import 'package:shopping_app/utils/custom_exception.dart';
 import '../../utils/api_constants.dart';
 
 class Auth with ChangeNotifier {
+  String _userToken = "";
+  String? _userId;
+  DateTime? _expiryDate;
+
+  String get token {
+    if (_userToken.isNotEmpty && _expiryDate?.isAfter(DateTime.now()) == true) {
+      return _userToken;
+    }
+    return "";
+  }
+
+  bool get isAuth {
+    return token.isNotEmpty;
+  }
+
   Future<void> signUp(String email, String password) async {
     return authenticate(email, password, ApiConstants.authSignupKey);
   }
@@ -28,10 +43,14 @@ class Auth with ChangeNotifier {
           }));
 
       final responseData = json.decode(response.body);
-      print(responseData);
       if (responseData['error'] != null) {
         throw CustomException(responseData['error']['message']);
       }
+      _userToken = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now()
+          .add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      notifyListeners();
     } catch (error) {
       rethrow;
     }

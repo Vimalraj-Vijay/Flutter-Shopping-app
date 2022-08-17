@@ -10,8 +10,7 @@ import '../main.dart';
 
 Map<String, WidgetBuilder> initRoutes() {
   return {
-    MyHomePage.id: (BuildContext ctx) =>
-        MyHomePage(title: MyHomePage.headerTitle),
+    MyHomePage.id: (BuildContext ctx) => const MyHomePage(),
     ShoppingHome.id: (BuildContext ctx) => const ShoppingHome(),
     ProductDetail.id: (BuildContext ctx) => const ProductDetail(),
     CartDetails.id: (BuildContext ctx) => const CartDetails(),
