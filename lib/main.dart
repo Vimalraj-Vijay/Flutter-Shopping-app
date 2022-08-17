@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/app/provider/auth.dart';
 import 'package:shopping_app/app/provider/orders.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
 import 'package:shopping_app/utils/globalcontext.dart';
@@ -9,7 +12,17 @@ import 'package:shopping_app/utils/routes.dart';
 import 'app/provider/cart.dart';
 import 'app/screens/auth_screen.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -30,6 +43,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => Orders(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
         ),
       ],
       child: MaterialApp(
