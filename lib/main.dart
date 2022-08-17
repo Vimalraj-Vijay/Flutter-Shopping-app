@@ -11,6 +11,7 @@ import 'package:shopping_app/utils/routes.dart';
 
 import 'app/provider/cart.dart';
 import 'app/screens/auth_screen.dart';
+import 'app/shopping_home.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -36,28 +37,35 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ProductProvider(),
+          create: (context) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, ProductProvider>(
+          create: (context) => ProductProvider("", []),
+          update: (context, auth, previousProduct) => ProductProvider(
+              auth.token,
+              previousProduct == null ? [] : previousProduct.products),
         ),
         ChangeNotifierProvider(
           create: (context) => Cart(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => Orders(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => Auth(),
-        ),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          create: (context) => Orders("", []),
+          update: (context, auth, previousOrder) => Orders(
+              auth.token, previousOrder == null ? [] : previousOrder.orders),
+        )
       ],
-      child: MaterialApp(
-        title: 'Shopping app',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          textTheme:
-              GoogleFonts.archivoNarrowTextTheme(Theme.of(context).textTheme),
-          primarySwatch: Colors.amber,
+      child: Consumer<Auth>(
+        builder: (context, auth, _) => MaterialApp(
+          title: 'Shopping app',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            textTheme:
+                GoogleFonts.archivoNarrowTextTheme(Theme.of(context).textTheme),
+            primarySwatch: Colors.amber,
+          ),
+          home: auth.isAuth ? const ShoppingHome() : const MyHomePage(),
+          routes: initRoutes(),
         ),
-        initialRoute: MyHomePage.id,
-        routes: initRoutes(),
       ),
     );
   }
@@ -65,9 +73,8 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   static var id = "/home";
-  static var headerTitle = "Shopping App";
 
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -78,8 +85,6 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -87,6 +92,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return AuthScreen();
+    return const AuthScreen();
   }
 }

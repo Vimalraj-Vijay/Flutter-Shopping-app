@@ -7,7 +7,11 @@ import 'package:shopping_app/utils/api_constants.dart';
 import 'package:shopping_app/utils/custom_exception.dart';
 
 class ProductProvider with ChangeNotifier {
+  final String _authToken;
+
   List<Products> _items = [];
+
+  ProductProvider(this._authToken, this._items);
 
   List<Products> get products {
     return [..._items];
@@ -24,7 +28,9 @@ class ProductProvider with ChangeNotifier {
   Future<void> fetchProducts() async {
     final url = Uri.parse(ApiConstants.baseUrl +
         ApiConstants.productsEndpoint +
-        ApiConstants.urlFormat);
+        ApiConstants.urlFormat +
+        ApiConstants.auth +
+        _authToken);
     try {
       final response = await http.get(url);
       final extractedResponse =
@@ -51,7 +57,9 @@ class ProductProvider with ChangeNotifier {
   Future<void> addProducts(Products products) async {
     final url = Uri.parse(ApiConstants.baseUrl +
         ApiConstants.productsEndpoint +
-        ApiConstants.urlFormat);
+        ApiConstants.urlFormat +
+        ApiConstants.auth +
+        _authToken);
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -80,7 +88,7 @@ class ProductProvider with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url = Uri.parse(
-          "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}");
+          "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
       dynamic updateProduct;
       if (isFav) {
         products.toggleFavorite();
@@ -107,7 +115,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url = Uri.parse(
-        "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}");
+        "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
     final response = await http.delete(url);
     if (response.statusCode >= 400) {
       throw CustomException("Http Request failed");
