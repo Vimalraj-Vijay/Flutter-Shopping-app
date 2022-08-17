@@ -1,6 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_app/app/provider/auth.dart';
+import 'package:shopping_app/utils/custom_exception.dart';
 
 enum AuthMode { signUp, login }
 
@@ -102,7 +106,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState != null && !_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -111,10 +115,33 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.login) {
-      // Log user in
-    } else {
-      // Sign user up
+    try {
+      if (_authMode == AuthMode.login) {
+        await Provider.of<Auth>(context, listen: false)
+            .login(_authData['email']!, _authData['password']!);
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .signUp(_authData['email']!, _authData['password']!);
+      }
+    } on CustomException catch (error) {
+      var errorMessage = error.message;
+      if (error.message.contains("EMAIL_EXISTS")) {
+        errorMessage =
+            "The email address is already in use by another account.";
+      } else if (error.message.contains("EMAIL_NOT_FOUND")) {
+        errorMessage =
+            "There is no user record corresponding to this emailId. Create a new account";
+      } else if (error.message.contains("INVALID_PASSWORD")) {
+        errorMessage = "The password is invalid";
+      } else if (error.message.contains("USER_DISABLED")) {
+        errorMessage =
+            "The user account has been disabled by an administrator.";
+      } else if (error.message.contains("INVALID_EMAIL")) {
+        errorMessage = "The email address is invalid";
+      }
+      Fluttertoast.showToast(msg: errorMessage);
+    } catch (error) {
+      Fluttertoast.showToast(msg: error.toString());
     }
     setState(() {
       _isLoading = false;
