@@ -7,7 +7,7 @@ import 'package:shopping_app/utils/globalcontext.dart';
 import 'package:shopping_app/utils/routes.dart';
 
 import 'app/provider/cart.dart';
-import 'app/shopping_home.dart';
+import 'app/screens/auth_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -71,6 +71,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const ShoppingHome();
+    return AuthScreen();
   }
 }
