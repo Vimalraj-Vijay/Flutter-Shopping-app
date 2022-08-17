@@ -8,7 +8,6 @@ import 'package:shopping_app/utils/routes.dart';
 
 import 'app/provider/cart.dart';
 import 'app/screens/auth_screen.dart';
-import 'app/shopping_home.dart';
 
 void main() {
   runApp(const MyApp());

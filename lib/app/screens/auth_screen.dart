@@ -2,10 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-enum AuthMode { Signup, Login }
+enum AuthMode { signUp, login }
 
 class AuthScreen extends StatelessWidget {
   static const routeName = '/auth';
+
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class AuthScreen extends StatelessWidget {
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                stops: [0, 1],
+                stops: const [0, 1],
               ),
             ),
           ),
@@ -48,8 +50,8 @@ class AuthScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.deepOrange.shade900,
-                        boxShadow: [
-                          const BoxShadow(
+                        boxShadow: const [
+                          BoxShadow(
                             blurRadius: 8,
                             color: Colors.black26,
                             offset: Offset(0, 2),
@@ -92,8 +94,8 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  AuthMode _authMode = AuthMode.Login;
-  Map<String, String> _authData = {
+  AuthMode _authMode = AuthMode.login;
+  final Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
@@ -109,7 +111,7 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
+    if (_authMode == AuthMode.login) {
       // Log user in
     } else {
       // Sign user up
@@ -120,13 +122,13 @@ class _AuthCardState extends State<AuthCard> {
   }
 
   void _switchAuthMode() {
-    if (_authMode == AuthMode.Login) {
+    if (_authMode == AuthMode.login) {
       setState(() {
-        _authMode = AuthMode.Signup;
+        _authMode = AuthMode.signUp;
       });
     } else {
       setState(() {
-        _authMode = AuthMode.Login;
+        _authMode = AuthMode.login;
       });
     }
   }
@@ -140,9 +142,9 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: _authMode == AuthMode.signUp ? 320 : 260,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+            BoxConstraints(minHeight: _authMode == AuthMode.signUp ? 320 : 260),
         width: deviceSize.width * 0.75,
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -176,13 +178,13 @@ class _AuthCardState extends State<AuthCard> {
                     _authData['password'] = value!;
                   },
                 ),
-                if (_authMode == AuthMode.Signup)
+                if (_authMode == AuthMode.signUp)
                   TextFormField(
-                    enabled: _authMode == AuthMode.Signup,
+                    enabled: _authMode == AuthMode.signUp,
                     decoration:
                         const InputDecoration(labelText: 'Confirm Password'),
                     obscureText: true,
-                    validator: _authMode == AuthMode.Signup
+                    validator: _authMode == AuthMode.signUp
                         ? (value) {
                             if (value != _passwordController.text) {
                               return 'Passwords do not match!';
@@ -206,7 +208,7 @@ class _AuthCardState extends State<AuthCard> {
                     color: Theme.of(context).primaryColor,
                     textColor: Theme.of(context).primaryTextTheme.button?.color,
                     child:
-                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                        Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
                   ),
                 FlatButton(
                   onPressed: _switchAuthMode,
@@ -215,7 +217,7 @@ class _AuthCardState extends State<AuthCard> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   textColor: Theme.of(context).primaryColor,
                   child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                      '${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                 ),
               ],
             ),
