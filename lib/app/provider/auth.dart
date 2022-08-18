@@ -8,7 +8,7 @@ import '../../utils/api_constants.dart';
 
 class Auth with ChangeNotifier {
   String _userToken = "";
-  String? _userId;
+  String _userId = "";
   DateTime? _expiryDate;
 
   String get token {
@@ -16,6 +16,10 @@ class Auth with ChangeNotifier {
       return _userToken;
     }
     return "";
+  }
+
+  String get userId {
+    return _userId;
   }
 
   bool get isAuth {

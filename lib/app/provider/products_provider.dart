@@ -8,10 +8,11 @@ import 'package:shopping_app/utils/custom_exception.dart';
 
 class ProductProvider with ChangeNotifier {
   final String _authToken;
+  final String _userID;
 
   List<Products> _items = [];
 
-  ProductProvider(this._authToken, this._items);
+  ProductProvider(this._authToken, this._userID, this._items);
 
   List<Products> get products {
     return [..._items];
@@ -25,16 +26,23 @@ class ProductProvider with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts([bool isFilterByUser = false]) async {
+    var filterBy =
+        isFilterByUser ? '&orderBy="creatorId"&equalTo="$_userID"' : '';
     final url = Uri.parse(ApiConstants.baseUrl +
         ApiConstants.productsEndpoint +
         ApiConstants.urlFormat +
         ApiConstants.auth +
-        _authToken);
+        _authToken +
+        filterBy);
     try {
       final response = await http.get(url);
       final extractedResponse =
           jsonDecode(response.body) as Map<String, dynamic>;
+      final favUrl = Uri.parse(
+          "${ApiConstants.baseUrl}${ApiConstants.userFavourite}/$_userID/${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
+      final userFavoriteResponse = await http.get(favUrl);
+      final favoriteData = json.decode(userFavoriteResponse.body);
       final List<Products> loadProducts = [];
       extractedResponse.forEach((key, value) {
         loadProducts.add(
@@ -44,7 +52,8 @@ class ProductProvider with ChangeNotifier {
             description: value['description'],
             imageUrl: value['imageUrl'],
             price: value['price'],
-            isFavorite: value['isFavorite'],
+            isFavorite:
+                favoriteData == null ? false : favoriteData[key] ?? false,
           ),
         );
       });
@@ -67,7 +76,7 @@ class ProductProvider with ChangeNotifier {
             "description": products.description,
             "imageUrl": products.imageUrl,
             "price": products.price,
-            "isFavorite": products.isFavorite,
+            "creatorId": _userID
           }));
 
       final addProduct = Products(
@@ -84,17 +93,22 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(String id, Products products, bool isFav) async {
+  Future<void> updateProduct(
+      String id, Products products, bool isFav, String userId) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = Uri.parse(
+      var url = Uri.parse(
           "${ApiConstants.baseUrl}${ApiConstants.productsEndpoint}/$id${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
       dynamic updateProduct;
+      http.Response response;
       if (isFav) {
+        url = Uri.parse(
+            "${ApiConstants.baseUrl}${ApiConstants.userFavourite}/$userId/$id${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
         products.toggleFavorite();
-        updateProduct = json.encode({
-          "isFavorite": products.isFavorite,
-        });
+        updateProduct = json.encode(
+          products.isFavorite,
+        );
+        response = await http.put(url, body: updateProduct);
       } else {
         updateProduct = json.encode({
           "title": products.title,
@@ -102,8 +116,8 @@ class ProductProvider with ChangeNotifier {
           "imageUrl": products.imageUrl,
           "price": products.price,
         });
+        response = await http.patch(url, body: updateProduct);
       }
-      final response = await http.patch(url, body: updateProduct);
       if (response.statusCode >= 400) {
         throw CustomException("Http Request failed");
       } else {
