@@ -41,40 +41,39 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: CircularProgressIndicator(),
             );
           } else {
-            if (snapshot.error != null) {
-              return const Center(
-                child: Text("An Error Occurred Please try again later"),
-              );
-            } else {
-              return Consumer<Orders>(
-                builder: (context, orders, child) => orders.ordersCount == 0
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Image(
-                            image: AssetImage("assets/images/order_now.png"),
-                            fit: BoxFit.fill,
+            return Consumer<Orders>(
+              builder: (context, orders, child) => orders.ordersCount == 0
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Image(
+                          image: AssetImage("assets/images/order_now.png"),
+                          fit: BoxFit.fill,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "No orders found.\nPlace your order now",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.purple,
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "No orders found.\nPlace your order now",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.purple,
-                            ),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      )
-                    : ListView.builder(
-                        itemBuilder: (ctx, index) =>
-                            OrderItem(orderItem: orders.orders[index]),
-                        itemCount: orders.ordersCount),
-              );
-            }
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    )
+                  : snapshot.hasError
+                      ? const Center(
+                          child:
+                              Text("An Error Occurred Please try again later"),
+                        )
+                      : ListView.builder(
+                          itemBuilder: (ctx, index) =>
+                              OrderItem(orderItem: orders.orders[index]),
+                          itemCount: orders.ordersCount),
+            );
           }
         },
       ),

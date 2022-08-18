@@ -22,9 +22,10 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   final String _authToken;
+  final String _userId;
   List<OrderItem> _orderItem = [];
 
-  Orders(this._authToken, this._orderItem);
+  Orders(this._authToken, this._userId, this._orderItem);
 
   List<OrderItem> get orders {
     return [..._orderItem];
@@ -36,7 +37,7 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchOrders() async {
     final url = Uri.parse(
-        "${ApiConstants.baseUrl}${ApiConstants.ordersEndpoint}${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
+        "${ApiConstants.baseUrl}${ApiConstants.ordersEndpoint}/$_userId${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
     try {
       final response = await http.get(url);
       final extractedResponse =
@@ -69,7 +70,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrders(List<CartItem> cartItem, double total) async {
     final url = Uri.parse(
-        "${ApiConstants.baseUrl}${ApiConstants.ordersEndpoint}${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
+        "${ApiConstants.baseUrl}${ApiConstants.ordersEndpoint}/$_userId${ApiConstants.urlFormat}${ApiConstants.auth}$_authToken");
     var timeStamp = DateTime.now();
     try {
       final response = await http.post(url,

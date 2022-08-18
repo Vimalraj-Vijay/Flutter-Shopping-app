@@ -11,7 +11,8 @@ class ManageProducts extends StatelessWidget {
   const ManageProducts({Key? key}) : super(key: key);
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await Provider.of<ProductProvider>(context, listen: false).fetchProducts();
+    await Provider.of<ProductProvider>(context, listen: false)
+        .fetchProducts(true);
   }
 
   @override
@@ -31,13 +32,23 @@ class ManageProducts extends StatelessWidget {
       drawer: const AppDrawer(),
       body: productData.products.isEmpty
           ? const Center(child: Text('No Products Found. Add a product'))
-          : RefreshIndicator(
-              onRefresh: () => _refreshProducts(context),
-              child: ListView.builder(
-                itemBuilder: (_, index) =>
-                    ManageProductItem(products: productData.products[index]),
-                itemCount: productData.products.length,
-              ),
+          : FutureBuilder(
+              future: _refreshProducts(context),
+              builder: (context, snapshot) => snapshot.connectionState ==
+                      ConnectionState.waiting
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () => _refreshProducts(context),
+                      child: Consumer<ProductProvider>(
+                        builder: (context, productData, _) => ListView.builder(
+                          itemBuilder: (_, index) => ManageProductItem(
+                              products: productData.products[index]),
+                          itemCount: productData.products.length,
+                        ),
+                      ),
+                    ),
             ),
     );
   }
