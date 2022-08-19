@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/auth.dart';
 import 'package:shopping_app/app/provider/orders.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
+import 'package:shopping_app/app/screens/splash/splash.dart';
 import 'package:shopping_app/utils/globalcontext.dart';
 import 'package:shopping_app/utils/routes.dart';
 
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
                 GoogleFonts.archivoNarrowTextTheme(Theme.of(context).textTheme),
             primarySwatch: Colors.amber,
           ),
-          home: auth.isAuth ? const ShoppingHome() : const MyHomePage(),
+          home: const Splash(),
           routes: initRoutes(),
         ),
       ),
