@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/app/screens/splash/splash.dart';
 
 import '../app/screens/cart_details.dart';
 import '../app/screens/edit_product.dart';
@@ -10,6 +11,7 @@ import '../main.dart';
 
 Map<String, WidgetBuilder> initRoutes() {
   return {
+    Splash.id: (BuildContext ctx) => const Splash(),
     MyHomePage.id: (BuildContext ctx) => const MyHomePage(),
     ShoppingHome.id: (BuildContext ctx) => const ShoppingHome(),
     ProductDetail.id: (BuildContext ctx) => const ProductDetail(),
