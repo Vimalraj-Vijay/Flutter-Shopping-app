@@ -65,7 +65,15 @@ class MyApp extends StatelessWidget {
                 GoogleFonts.archivoNarrowTextTheme(Theme.of(context).textTheme),
             primarySwatch: Colors.amber,
           ),
-          home: const Splash(),
+          home: auth.isAuth
+              ? const ShoppingHome()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? const Splash()
+                          : const MyHomePage(),
+                ),
           routes: initRoutes(),
         ),
       ),
