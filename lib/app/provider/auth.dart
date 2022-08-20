@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_app/utils/custom_exception.dart';
 
 import '../../utils/api_constants.dart';
@@ -36,6 +37,27 @@ class Auth with ChangeNotifier {
     return authenticate(email, password, ApiConstants.authLoginKey);
   }
 
+  Future<bool> tryAutoLogin() async {
+    final sharedPref = await SharedPreferences.getInstance();
+    if (!sharedPref.containsKey("key_userdata")) {
+      return false;
+    }
+    final extractedUserData =
+        json.decode(sharedPref.getString("key_userdata").toString())
+            as Map<String, dynamic>;
+    final expiryDate = DateTime.parse(extractedUserData["expiryDate"]);
+
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+    _userToken = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expiryDate = expiryDate;
+    notifyListeners();
+    autoLogOutTimer();
+    return true;
+  }
+
   Future<void> authenticate(
       String email, String password, String urlSegment) async {
     final url = Uri.parse(
@@ -58,12 +80,19 @@ class Auth with ChangeNotifier {
           .add(Duration(seconds: int.parse(responseData['expiresIn'])));
       autoLogOutTimer();
       notifyListeners();
+      final sharedPref = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _userToken,
+        'userId': _userId,
+        'expiryDate': _expiryDate?.toIso8601String()
+      });
+      sharedPref.setString("key_userdata", userData);
     } catch (error) {
       rethrow;
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
     _userToken = "";
     _userId = "";
     _expiryDate = null;
@@ -71,6 +100,8 @@ class Auth with ChangeNotifier {
       _authTimer?.cancel();
       _authTimer = null;
     }
+    final pref = await SharedPreferences.getInstance();
+    pref.clear();
     notifyListeners();
   }
 
