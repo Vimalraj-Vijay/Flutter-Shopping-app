@@ -39,22 +39,27 @@ class ManageProductItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          products.title,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "\$ ${products.price.toStringAsFixed(2)}",
-                          style: const TextStyle(color: Colors.white),
-                        )
-                      ],
+                    Flexible(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              products.title,
+                              maxLines: 2,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "\$ ${products.price.toStringAsFixed(2)}",
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
                     ),
                     Row(
                       children: [
