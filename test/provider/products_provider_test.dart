@@ -3,7 +3,7 @@ import 'package:shopping_app/app/provider/products.dart';
 import 'package:shopping_app/app/provider/products_provider.dart';
 
 void main() async {
-  ProductProvider productProvider = ProductProvider("","",[]);
+  ProductProvider productProvider = ProductProvider("", "", []);
 
   group('Adding to cart', () {
     test(
@@ -35,7 +35,8 @@ void main() async {
               description: "description",
               imageUrl: "imageUrl",
               price: 66),
-          false,"");
+          false,
+          "");
 
       // then
       var actual = productProvider.products;
