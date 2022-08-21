@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/app/provider/auth.dart';
+import 'package:shopping_app/utils/buttons.dart';
 import 'package:shopping_app/utils/custom_exception.dart';
 
 enum AuthMode { signUp, login }
@@ -26,12 +25,12 @@ class AuthScreen extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  const Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
+                  const Color.fromRGBO(255, 153, 51, 1).withOpacity(0.9),
+                  const Color.fromRGBO(255, 255, 255, 1).withOpacity(0.9),
+                  const Color.fromRGBO(19, 136, 8, 1).withOpacity(0.9),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                stops: const [0, 1],
               ),
             ),
           ),
@@ -44,37 +43,33 @@ class AuthScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 94.0),
-                      transform: Matrix4.rotationZ(-8 * pi / 180)
-                        ..translate(-10.0),
-                      // ..translate(-10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black26,
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                      ),
-                      child: Text(
-                        'MyShop',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                          fontSize: 50,
-                          fontFamily: 'Anton',
-                          fontWeight: FontWeight.normal,
+                      child: Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    child: Column(
+                      children: const [
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Image(
+                            image: AssetImage("assets/images/logo.png"),
+                            height: 150,
+                            width: 150,
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
+                        Text(
+                          'Shopping app',
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: Color.fromRGBO(0, 0, 128, 1),
+                            fontWeight: FontWeight.w300,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  )),
                   Flexible(
-                    flex: deviceSize.width > 600 ? 2 : 1,
+                    flex: deviceSize.width > 300 ? 2 : 1,
                     child: const AuthCard(),
                   ),
                 ],
@@ -93,6 +88,7 @@ class AuthCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AuthCardState createState() => _AuthCardState();
 }
 
@@ -169,55 +165,95 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.signUp ? 320 : 260,
+        height: _authMode == AuthMode.signUp ? 380 : 300,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.signUp ? 320 : 260),
-        width: deviceSize.width * 0.75,
+            BoxConstraints(minHeight: _authMode == AuthMode.signUp ? 380 : 300),
+        width: deviceSize.width * .90,
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'E-Mail'),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value!.isEmpty || !value.contains('@')) {
-                      return 'Invalid email!';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _authData['email'] = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'E-Mail',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(0, 0, 128, 1), width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(0, 0, 128, 1), width: 1.0),
+                      ),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return 'Invalid email!';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _authData['email'] = value!;
+                    },
+                  ),
                 ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                  controller: _passwordController,
-                  validator: (value) {
-                    if (value!.isEmpty || value.length < 5) {
-                      return 'Password is too short!';
-                    }
-                  },
-                  onSaved: (value) {
-                    _authData['password'] = value!;
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(0, 0, 128, 1), width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(0, 0, 128, 1), width: 1.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    controller: _passwordController,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 5) {
+                        return 'Password is too short!';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _authData['password'] = value!;
+                    },
+                  ),
                 ),
                 if (_authMode == AuthMode.signUp)
-                  TextFormField(
-                    enabled: _authMode == AuthMode.signUp,
-                    decoration:
-                        const InputDecoration(labelText: 'Confirm Password'),
-                    obscureText: true,
-                    validator: _authMode == AuthMode.signUp
-                        ? (value) {
-                            if (value != _passwordController.text) {
-                              return 'Passwords do not match!';
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: TextFormField(
+                      enabled: _authMode == AuthMode.signUp,
+                      decoration: const InputDecoration(
+                        labelText: 'Confirm Password',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(0, 0, 128, 1), width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(0, 0, 128, 1), width: 1.0),
+                        ),
+                      ),
+                      obscureText: true,
+                      validator: _authMode == AuthMode.signUp
+                          ? (value) {
+                              if (value != _passwordController.text) {
+                                return 'Passwords do not match!';
+                              }
+                              return null;
                             }
-                          }
-                        : null,
+                          : null,
+                    ),
                   ),
                 const SizedBox(
                   height: 20,
@@ -225,27 +261,16 @@ class _AuthCardState extends State<AuthCard> {
                 if (_isLoading)
                   const CircularProgressIndicator()
                 else
-                  RaisedButton(
-                    onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button?.color,
-                    child:
-                        Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),
-                  ),
-                FlatButton(
+                  getElevatedButton(
+                      _authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP',
+                      () => _submit(),
+                      true,
+                      Theme.of(context).primaryColor),
+                TextButton(
                   onPressed: _switchAuthMode,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textColor: Theme.of(context).primaryColor,
                   child: Text(
                       '${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                ),
+                )
               ],
             ),
           ),
