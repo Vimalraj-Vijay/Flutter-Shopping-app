@@ -17,7 +17,6 @@ class ManageProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productData = Provider.of<ProductProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Manage Products"),
@@ -30,26 +29,28 @@ class ManageProducts extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: productData.products.isEmpty
-          ? const Center(child: Text('No Products Found. Add a product'))
-          : FutureBuilder(
-              future: _refreshProducts(context),
-              builder: (context, snapshot) => snapshot.connectionState ==
-                      ConnectionState.waiting
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : RefreshIndicator(
-                      onRefresh: () => _refreshProducts(context),
-                      child: Consumer<ProductProvider>(
-                        builder: (context, productData, _) => ListView.builder(
-                          itemBuilder: (_, index) => ManageProductItem(
-                              products: productData.products[index]),
-                          itemCount: productData.products.length,
-                        ),
-                      ),
+      body: FutureBuilder(
+        future: _refreshProducts(context),
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () => _refreshProducts(context),
+                    child: Consumer<ProductProvider>(
+                      builder: (context, productData, _) => productData
+                              .products.isEmpty
+                          ? const Center(
+                              child: Text('No Products Found. Add a product'))
+                          : ListView.builder(
+                              itemBuilder: (_, index) => ManageProductItem(
+                                  products: productData.products[index]),
+                              itemCount: productData.products.length,
+                            ),
                     ),
-            ),
+                  ),
+      ),
     );
   }
 }
