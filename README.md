@@ -5,6 +5,9 @@ An online shopping app developed using Flutter
    - Fetch Products,Orders from Backend(**Firebase Database**).
    - Store and Update Products to backend.
    - Used [Http](https://pub.dev/packages/http) Package for request call.
+   - Login and Signup UI integrated.
+   - Auth using Firebase Authentication.
+   - Show Manage Products based on the userId.
 
 # Code Coverage
 [![Codecov](https://github.com/Vimalraj-Vijay/Flutter-Shopping-app/actions/workflows/codecov.yml/badge.svg)](https://github.com/Vimalraj-Vijay/Flutter-Shopping-app/actions/workflows/codecov.yml)
@@ -19,6 +22,12 @@ An online shopping app developed using Flutter
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/8d345acf3829451d801bb759051f6f1c)](https://www.codacy.com/gh/Vimalraj-Vijay/Flutter-Shopping-app/dashboard?utm_source=github.com&utm_medium=referral&utm_content=Vimalraj-Vijay/Flutter-Shopping-app&utm_campaign=Badge_Coverage)
 
 # App ScreenShots
+## Splash
+<img width="600" alt="Screenshot 2022-08-22 at 1 06 52 PM" src="https://user-images.githubusercontent.com/37204020/185865737-c7bcdaa1-1574-4f22-a344-e4fa07a14f21.png">
+
+## Login & Signup
+<img width="600" alt="Screenshot 2022-08-22 at 1 07 14 PM" src="https://user-images.githubusercontent.com/37204020/185865752-855492a0-2636-4d36-8b46-5a393fd40b24.png">
+
 ## HomePage
 <img width="600" alt="Screenshot 2022-08-10 at 9 10 18 PM" src="https://user-images.githubusercontent.com/37204020/183949605-87d439d8-9a1a-4ee7-8d8d-9c4abe7ef075.png">
 
