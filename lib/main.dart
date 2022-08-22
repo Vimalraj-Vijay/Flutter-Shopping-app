@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -65,19 +66,30 @@ class MyApp extends StatelessWidget {
                 GoogleFonts.archivoNarrowTextTheme(Theme.of(context).textTheme),
             primarySwatch: Colors.amber,
           ),
-          home: auth.isAuth
-              ? const ShoppingHome()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (context, snapshot) =>
-                      snapshot.connectionState == ConnectionState.waiting
-                          ? const Splash()
-                          : const MyHomePage(),
-                ),
+          home: FutureBuilder<bool>(
+            future: isAuth(auth),
+            builder: (context, snapshot) => snapshot.connectionState ==
+                    ConnectionState.waiting
+                ? const Splash()
+                : snapshot.data ?? false
+                    ? const ShoppingHome()
+                    : FutureBuilder(
+                        future: auth.tryAutoLogin(),
+                        builder: (context, snapshot) =>
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? const Splash()
+                                : const MyHomePage(),
+                      ),
+          ),
           routes: initRoutes(),
         ),
       ),
     );
+  }
+
+  Future<bool> isAuth(Auth auth) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return auth.isAuth;
   }
 }
 
