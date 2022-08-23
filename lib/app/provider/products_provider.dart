@@ -48,6 +48,7 @@ class ProductProvider with ChangeNotifier {
         loadProducts.add(
           Products(
             id: key,
+            creatorId: value['creatorId'],
             title: value['title'],
             description: value['description'],
             imageUrl: value['imageUrl'],
