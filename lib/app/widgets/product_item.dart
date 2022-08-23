@@ -16,13 +16,18 @@ class ProductItem extends StatelessWidget {
     final cart = Provider.of<Cart>(context, listen: false);
     final auth = Provider.of<Auth>(context, listen: false);
     final scaffold = ScaffoldMessenger.of(context);
+    final isShowCart = auth.userId != product.creatorId;
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         footer: GridTileBar(
-          title: Text(
-            product.title,
-            textAlign: TextAlign.center,
+          title: Center(
+            child: Container(
+              alignment: isShowCart ? Alignment.center : Alignment.centerLeft,
+              child: Text(
+                product.title,
+              ),
+            ),
           ),
           backgroundColor: Colors.black45,
           leading: Consumer<Products>(
@@ -52,25 +57,28 @@ class ProductItem extends StatelessWidget {
               },
             ),
           ),
-          trailing: IconButton(
-            iconSize: 20,
-            icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              cart.addCart(product.id, product.title, product.price);
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text("Item Added Successfully"),
-                  duration: const Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: "UNDO",
-                    onPressed: () {
-                      cart.removeSingleItemFromCart(product.id);
-                    },
+          trailing: Visibility(
+            visible: isShowCart,
+            child: IconButton(
+              iconSize: 20,
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                cart.addCart(product.id, product.title, product.price);
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text("Item Added Successfully"),
+                    duration: const Duration(seconds: 3),
+                    action: SnackBarAction(
+                      label: "UNDO",
+                      onPressed: () {
+                        cart.removeSingleItemFromCart(product.id);
+                      },
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
         child: GestureDetector(
